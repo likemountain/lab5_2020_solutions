@@ -3,6 +3,7 @@
 // Fangzhou Xia       - xiafz    _ mit _ edu,    Sept 2015
 // Peter KT Yu        - peterkty _ mit _ edu,    Sept 2016
 // Ryan Fish          - fishr    _ mit _ edu,    Sept 2016
+// Jerry Ng           - jerryng  _ mit _ edu,    Feb 2019
 
 #include "Arduino.h"
 #include "helper.h"
@@ -14,7 +15,7 @@ SerialComm          serialComm;       // serial communication class
 PathPlanner         pathPlanner;      // path planner
 unsigned long       prevTime = 0;
 
-boolean usePathPlanner = true;
+boolean usePathPlanner = false;
 
 void setup() {
     Serial.begin(115200);       // initialize Serial Communication

@@ -34,7 +34,7 @@ EncoderMeasurement::EncoderMeasurement(int motor_type):
 
 void EncoderMeasurement::update() {
     float encoder1Count = readEncoder(1);
-    float encoder2Count = -1 * readEncoder(2);
+    float encoder2Count = -1*readEncoder(2);
     float dEncoder1 = (encoder1Count - encoder1CountPrev);
     float dEncoder2 = (encoder2Count - encoder2CountPrev);
     
@@ -67,19 +67,20 @@ void RobotPose::update(float dPhiL, float dPhiR) {
     float dX, dY;
     
     // MODIFY CODE BELOW TO SET THE CORRECT VALUES
-    //   Relevant constants: r, b
-    //   Relevant function: sqrt()
+    //   Relavent constants: r, b
+    //   Relavent function: sqrt()
     //   Use the equations referenced in the handout to set these values.
     
-    // dTh = ;
-    // dX = ;
-    // dY = ;
+    dTh = r/(2*b) *(dPhiR - dPhiL);
+    Th = Th + dTh;
     
-    // Th = ;
-    // X = ;
-    // Y = ;
+    dX = r/2 * (cos(Th)*dPhiR + cos(Th)*dPhiL);
+    dY = r/2 * (sin(Th)*dPhiR + sin(Th)*dPhiL);
+    
+    X = X + dX;
+    Y = Y + dY;
 
-    // pathDistance += ;
+    pathDistance = pathDistance + sqrt(dX*dX + dY*dY);
 }
 
 //PathPlanner Class function implementation
@@ -88,29 +89,34 @@ void PathPlanner::navigateTrajU(const RobotPose & robotPose) {
     // Check whether you are ready to move forward into the next stage of the path
     
     // an example for the first straight line has been provided:
-    
     // Straight line forward
     if (robotPose.pathDistance < 1.0) { 
         float robotVel = .2, K = 0;
         updateDesiredV(robotVel, K);
     } 
-    // Semicircle
-    //else if (){
-    //}
+    // Hemicircle
+    else if ((robotPose.pathDistance > 1.0)&& (robotPose.pathDistance < (1+.25*PI))){
+        float robotVel = .2, K = 1/0.25;
+        updateDesiredV(robotVel, K);
+    }
     // Straight line back
-    //else if(){
-    //}
+    else if((robotPose.pathDistance > robotPose.pathDistance < (1+.25*PI)) && (robotPose.pathDistance < (2 + .25*PI))){
+        float robotVel = .2, K = 0;
+        updateDesiredV(robotVel, K);
+    }
     // Stop at the end
-    //else {
-    //}
+    else if(robotPose.pathDistance > (2 + .25*PI)){
+      float robotVel = 0, K = 0;
+      updateDesiredV(robotVel, K);
+    }
 }
 
 void PathPlanner::updateDesiredV(float robotVel, float K) {
-    // command wheel velocities based on K (curvature) and average forwardVel
+    // command wheel velocities based on K and average forwardVel
     
     // MODIFY CODE BELOW TO SET THE CORRECT VALUES
-    //  desiredWV_R = ;
-    //  desiredWV_L = ;
+    desiredWV_L = robotVel - K *b * robotVel;
+    desiredWV_R = 2*robotVel - desiredWV_L ;
 }
 
 // PIController Class function implementation (not the focus of this lab)
