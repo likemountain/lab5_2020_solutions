@@ -3,6 +3,7 @@
 // Fangzhou Xia       - xiafz    _ mit _ edu,    Sept 2015
 // Peter KT Yu        - peterkty _ mit _ edu,    Sept 2016
 // Ryan Fish          - fishr    _ mit _ edu,    Sept 2016
+// Jerry Ng           - jerryng  _ mit _ edu,    Feb 2019
 
 #include "helper.h"
 
@@ -66,8 +67,8 @@ void RobotPose::update(float dPhiL, float dPhiR) {
     float dX, dY;
     
     // MODIFY CODE BELOW TO SET THE CORRECT VALUES
-    //   Relavent constants: r, b
-    //   Relavent function: sqrt()
+    //   Relevant constants: r, b
+    //   Relevant function: sqrt()
     //   Use the equations referenced in the handout to set these values.
     
     // dTh = ;
@@ -93,7 +94,7 @@ void PathPlanner::navigateTrajU(const RobotPose & robotPose) {
         float robotVel = .2, K = 0;
         updateDesiredV(robotVel, K);
     } 
-    // Hemicircle
+    // Semicircle
     //else if (){
     //}
     // Straight line back
@@ -105,7 +106,7 @@ void PathPlanner::navigateTrajU(const RobotPose & robotPose) {
 }
 
 void PathPlanner::updateDesiredV(float robotVel, float K) {
-    // command wheel velocities based on K and average forwardVel
+    // command wheel velocities based on K (curvature) and average forwardVel
     
     // MODIFY CODE BELOW TO SET THE CORRECT VALUES
     //  desiredWV_R = ;

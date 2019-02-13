@@ -14,13 +14,14 @@ SerialComm          serialComm;       // serial communication class
 PathPlanner         pathPlanner;      // path planner
 unsigned long       prevTime = 0;
 
-boolean usePathPlanner = false;
+boolean usePathPlanner = true;
 
 void setup() {
     Serial.begin(115200);       // initialize Serial Communication
     encoder.init();  // connect with encoder
     wheelVelCtrl.init();        // connect with motor
     delay(1e3);                 // delay 1000 ms so the robot doesn't drive off without you
+    robotPose.pathDistance = 0;
 }
 
 void loop() {
