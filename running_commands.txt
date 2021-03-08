@@ -1,0 +1,14 @@
+DO THIS TO MAKE:
+source /opt/ros/melodic/setup.bash
+catkin_make
+
+DO THIS AFTER EACH NEW TAB:
+source devel/setup.bash
+
+DO THESE IN SEPARATE TABS:
+roscore
+roslaunch me212_robot viz.launch
+rosrun me212_robot simulator.py
+rosrun me212_robot robot.py
+rosrun me212_robot planner.py
+
