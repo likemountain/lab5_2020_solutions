@@ -23,12 +23,15 @@ class Robot(object):
 		self.b = 0.225
 		self.r = 0.037
 		self.a = 0.3
-		self.slippercent = 0.1
-		#Add in slip dynamics which just removes 10% of the desired wheel velocity
-		self.SLIP = True
+
 		self.enc2rev = 1.0 / self.rev2enc
 		self.enc2rad = self.enc2rev * 2 * np.pi
 		self.enc2wheel = self.enc2rad * self.r 
+
+		#5
+		#Add in slip dynamics which just removes 10% of the desired wheel velocity
+		self.slippercent = 0.1
+		self.SLIP = False
 
 		self.encLeft = 0
 		self.encRight = 0

@@ -14,7 +14,6 @@ from visualization_msgs.msg import Marker
 from geometry_msgs.msg import Point, Pose
 from me212_robot.msg import RobotPose, EncVals, WheelVel
 
-#WheelVel imports wheel velocities in 
 
 class Planner(object):
 	# Planner
@@ -37,7 +36,6 @@ class Planner(object):
 		self.encoder1CountPrev = 0
 		self.encoder2CountPrev = 0
 		rospy.init_node('robot_controller', anonymous=True)
-
 		rospy.Subscriber("/robot_encoder", EncVals, self.callback)
 		self.vel_pub = rospy.Publisher('/wheel_velocities', WheelVel, queue_size=10)
 		self.pose_pub = rospy.Publisher('/robot_pose', RobotPose, queue_size=10)
@@ -51,6 +49,7 @@ class Planner(object):
 		self.pose_pub.publish(self.RobotPose)
 		desiredV = [0,0]
 		if self.PLAN:
+			#4
 			#Drive in a straight direction
 			#desiredV = self.PathPlanner(robotVel = 0.5, K = 0)
 
@@ -80,43 +79,48 @@ class Planner(object):
 	
 
 	def calc_dPhis(self, leftEnc, rightEnc):
-		dEncoder1 = (rightEnc - self.encoder1CountPrev);
-		dEncoder2 = (leftEnc - self.encoder2CountPrev);
+
+		#1
+		dEncoder1 = (rightEnc - self.encoder1CountPrev)
+		dEncoder2 = (leftEnc - self.encoder2CountPrev)
 	
-		#update the angle incremet in radians
-		dphi1 = (dEncoder1 * self.enc2rad);
-		dphi2 = (dEncoder2 * self.enc2rad);
+		#update the angle increment in radians
+		dphi1 = (dEncoder1 * self.enc2rad)
+		dphi2 = (dEncoder2 * self.enc2rad)
 		
 		#for encoder index and motor position switching (Right is 1, Left is 2)
-		dPhiR = dphi1;
-		dPhiL = dphi2;
+		dPhiR = dphi1
+		dPhiL = dphi2
 		
-		self.encoder1CountPrev = rightEnc;
-		self.encoder2CountPrev = leftEnc;
+		self.encoder1CountPrev = rightEnc
+		self.encoder2CountPrev = leftEnc
 		return dPhiR, dPhiL
 
 	def updatePose(self, dPhiL, dPhiR, Pose):
+
+		#2
 		#Takes in encoder values from the simulator to update the pose.
 		
 		#MODIFY CODE BELOW TO SET THE CORRECT VALUES
-		#   Relavant constants: r, b
-		#   Relevant function: sqrt()
+		#   Relevant constants: r, b
+		#   Relevant function: np.cos, np.sin, np.sqrt()
 		#   Use the equations referenced in the handout to set these values.
 		r = self.r
 		b = self.b
 
-		dTh = r/(2*b) *(dPhiR - dPhiL);
-		Pose.Th = Pose.Th + dTh;
+		dTh = r/(2*b) *(dPhiR - dPhiL)
+		Pose.Th = Pose.Th + dTh
 		
-		dX = r/2 * (np.cos(Pose.Th)*dPhiR + np.cos(Pose.Th)*dPhiL);
-		dY = r/2 * (np.sin(Pose.Th)*dPhiR + np.sin(Pose.Th)*dPhiL);
+		dX = r/2 * (np.cos(Pose.Th)*dPhiR + np.cos(Pose.Th)*dPhiL)
+		dY = r/2 * (np.sin(Pose.Th)*dPhiR + np.sin(Pose.Th)*dPhiL)
 		
-		Pose.X = Pose.X + dX;
-		Pose.Y = Pose.Y + dY;
+		Pose.X = Pose.X + dX
+		Pose.Y = Pose.Y + dY
 
-		Pose.pathDistance = Pose.pathDistance + np.sqrt(dX*dX + dY*dY);
+		Pose.pathDistance = Pose.pathDistance + np.sqrt(dX*dX + dY*dY)
 
 	def PathPlanner(self, robotVel, K):
+		#3
 		#Takes in robot velocity and curvature, outputs wheel velocities for control
 		desiredWV_L = robotVel - K *self.b * robotVel
 		desiredWV_R = 2*robotVel - desiredWV_L
@@ -128,15 +132,6 @@ class Planner(object):
 		self.velocities.rightVel = velList[1]
 		self.vel_pub.publish(self.velocities)
 
-
-
-class Pose(object):
-	"""docstring for Pose"""
-	def __init__(self):
-		self.X = 0
-		self.Y = 0
-		self.Th = 0
-		self.pathDistance = 0
 		
 
 if __name__ == '__main__':
