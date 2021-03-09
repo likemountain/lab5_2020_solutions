@@ -49,7 +49,13 @@ class Planner(object):
 		self.pose_pub.publish(self.RobotPose)
 		desiredV = [0,0]
 		if self.PLAN:
-			#4
+			# Task 4:
+			# Below is code that has the robot drive 1m in a straight line.
+			# You can call the current distance travelled by the robot using
+			# self.RobotPose.pathDistance. For this task, modify the code
+			# below so that the robot follows the U-shaped trajectory
+			# depicted in the handout.
+
 			#Drive in a straight direction
 			#desiredV = self.PathPlanner(robotVel = 0.5, K = 0)
 
@@ -81,7 +87,14 @@ class Planner(object):
 	def calc_dPhis(self, leftEnc, rightEnc):
 
 		# Task 1:
-		#
+		# Write code that determines the change in angle phi for each wheel.
+		# To do this, you need to find the change in value for each encoder,
+		# and then convert this to the appropriate angle. The angle changes
+		# will be returned as dPhiL and dPhiR. Make sure that your final
+		# answers are in radians.
+		# You'll find it useful to use the following variables/attributes:
+		# self.encoder1CountPrev, self.encoder2CountPrev, self.enc2rad
+
 		dEncoder1 = (rightEnc - self.encoder1CountPrev)
 		dEncoder2 = (leftEnc - self.encoder2CountPrev)
 	
@@ -99,7 +112,13 @@ class Planner(object):
 
 	def updatePose(self, dPhiL, dPhiR, Pose):
 
-		#2
+		# Task 2:
+		# Fill in the equations needed to find the change in theta (dTh),
+		# X (dX), and Y (dY). You may find the variables dPhiR (angle change
+		# for the right wheel), dPhiL (angle change for the left wheel),
+		# and Pose.Th (current value of theta) useful. Note that to take the
+		# power of something, you must use a pair of asterisks, **. e.g. X
+		# squared is X**2.
 		#Takes in encoder values from the simulator to update the pose.
 		
 		#MODIFY CODE BELOW TO SET THE CORRECT VALUES
@@ -121,7 +140,10 @@ class Planner(object):
 		Pose.pathDistance = Pose.pathDistance + np.sqrt(dX*dX + dY*dY)
 
 	def PathPlanner(self, robotVel, K):
-		#3
+		# Task 3:
+		# Write the equations for the required velocity for each wheel,
+		# given a desired robot velocity (robotVel) and path curvature (K).
+		# robotVel, K, and self.b may be useful variables.
 		#Takes in robot velocity and curvature, outputs wheel velocities for control
 		desiredWV_L = robotVel - K *self.b * robotVel
 		desiredWV_R = 2*robotVel - desiredWV_L
