@@ -28,7 +28,14 @@ class Robot(object):
 		self.enc2rad = self.enc2rev * 2 * np.pi
 		self.enc2wheel = self.enc2rad * self.r 
 
-		#5
+		# Task 5:
+		# You'll notice that the robot has been perfectly travelling along
+		# the desired trajectories. Would you expect this behaviour in the
+		# real world? A simple model for wheel slip has been introduced into
+		# the code. Increase the slip by changing self.slip to TRUE. Re-run
+		# the code for the U-shaped trajectory in Task 4. What changed? Does
+		# the robot accurately follow the desired trajectory?
+
 		#Add in slip dynamics which just removes 10% of the desired wheel velocity
 		self.slippercent = 0.1
 		self.SLIP = False

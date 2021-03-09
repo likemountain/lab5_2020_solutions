@@ -1,7 +1,6 @@
 #!/usr/bin/python
 
-# 2.12 Lab 2 me212_robot: ROS driver running on the pc side to read and send messages to arduino
-# Peter Yu Sept 2016
+# 2.12 Lab 4 me212_robot
 
 import rospy
 import tf

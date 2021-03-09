@@ -49,49 +49,51 @@ class Planner(object):
 		self.pose_pub.publish(self.RobotPose)
 		desiredV = [0,0]
 		if self.PLAN:
-			#4
+			# Task 4:
+			# Below is code that has the robot drive 1m in a straight line.
+			# You can call the current distance travelled by the robot using
+			# self.RobotPose.pathDistance. For this task, modify the code
+			# below so that the robot follows the U-shaped trajectory
+			# depicted in the handout.
+
 			#Drive in a straight direction
-			#desiredV = self.PathPlanner(robotVel = 0.5, K = 0)
+			 desiredV = self.PathPlanner(robotVel = 0.5, K = 0)
 
 			#Commented out the answer for a u shaped trajectory
-		    if self.RobotPose.pathDistance < 1.0:
-		        robotVel = .2
-		        K = 0
-		        desiredV =self.PathPlanner(robotVel, K)
-		   	# Hemicircle
-		    elif self.RobotPose.pathDistance < (1+.25*np.pi):
-		        robotVel = .2 
-		        K = -1/0.25
-		        desiredV =self.PathPlanner(robotVel, K)
-			
-		    # Straight line back
-		    elif self.RobotPose.pathDistance < (2 + .25*np.pi):
-		        robotVel = .2
-		        K = 0
-		        desiredV =self.PathPlanner(robotVel, K)
-			
-		    # Stop at the end
-		    elif self.RobotPose.pathDistance > (2 + .25*np.pi):
-				robotVel = 0 
-				K = 0
-				desiredV =self.PathPlanner(robotVel, K)
+		    # if self.RobotPose.pathDistance < ?:
+		    #     robotVel = ?
+		    #     K = ?
+		    #     desiredV =self.PathPlanner(robotVel, K)
+		   	# # Hemicircle
+		    # elif self.RobotPose.pathDistance < ?:
+		    #     robotVel = ?
+		    #     K = ?
+		    #     desiredV =self.PathPlanner(robotVel, K)
+			#
+		    # # Straight line back
+		    # elif self.RobotPose.pathDistance < ?:
+		    #     robotVel = ?
+		    #     K = ?
+		    #     desiredV =self.PathPlanner(robotVel, K)
+			#
+		    # # Stop at the end
+		    # elif self.RobotPose.pathDistance > ?:
+			# 	robotVel = ?
+			# 	K = ?
+			# 	desiredV =self.PathPlanner(robotVel, K)
 		self.updateVels(desiredV)
 	
 
 	def calc_dPhis(self, leftEnc, rightEnc):
 
 		# Task 1:
-		#
-		dEncoder1 = (rightEnc - self.encoder1CountPrev)
-		dEncoder2 = (leftEnc - self.encoder2CountPrev)
-	
-		#update the angle increment in radians
-		dphi1 = (dEncoder1 * self.enc2rad)
-		dphi2 = (dEncoder2 * self.enc2rad)
-		
-		#for encoder index and motor position switching (Right is 1, Left is 2)
-		dPhiR = dphi1
-		dPhiL = dphi2
+		# Write code that determines the change in angle phi for each wheel.
+		# To do this, you need to find the change in value for each encoder,
+		# and then convert this to the appropriate angle. The angle changes
+		# will be returned as dPhiL and dPhiR. Make sure that your final
+		# answers are in radians.
+		# You'll find it useful to use the following variables/attributes:
+		# self.encoder1CountPrev, self.encoder2CountPrev, self.enc2rad
 		
 		self.encoder1CountPrev = rightEnc
 		self.encoder2CountPrev = leftEnc
@@ -99,21 +101,27 @@ class Planner(object):
 
 	def updatePose(self, dPhiL, dPhiR, Pose):
 
-		#2
+		# Task 2:
+		# Fill in the equations needed to find the change in theta (dTh),
+		# X (dX), and Y (dY). You may find the variables dPhiR (angle change
+		# for the right wheel), dPhiL (angle change for the left wheel),
+		# and Pose.Th (current value of theta) useful. Note that to take the
+		# power of something, you must use a pair of asterisks, **. e.g. X
+		# squared is X**2.
 		#Takes in encoder values from the simulator to update the pose.
 		
 		#MODIFY CODE BELOW TO SET THE CORRECT VALUES
 		#   Relevant constants: r, b
-		#   Relevant function: np.cos, np.sin, np.sqrt()
+		#   Relevant function: np.cos(), np.sin(), np.sqrt()
 		#   Use the equations referenced in the handout to set these values.
 		r = self.r
 		b = self.b
 
-		dTh = r/(2*b) *(dPhiR - dPhiL)
+		#dTh = ?
 		Pose.Th = Pose.Th + dTh
 		
-		dX = r/2 * (np.cos(Pose.Th)*dPhiR + np.cos(Pose.Th)*dPhiL)
-		dY = r/2 * (np.sin(Pose.Th)*dPhiR + np.sin(Pose.Th)*dPhiL)
+		#dX = ?
+		#dY = ?
 		
 		Pose.X = Pose.X + dX
 		Pose.Y = Pose.Y + dY
@@ -121,10 +129,14 @@ class Planner(object):
 		Pose.pathDistance = Pose.pathDistance + np.sqrt(dX*dX + dY*dY)
 
 	def PathPlanner(self, robotVel, K):
-		#3
+		# Task 3:
+		# Write the equations for the required velocity for each wheel,
+		# given a desired robot velocity (robotVel) and path curvature (K).
+		# robotVel, K, and self.b may be useful variables.
 		#Takes in robot velocity and curvature, outputs wheel velocities for control
-		desiredWV_L = robotVel - K *self.b * robotVel
-		desiredWV_R = 2*robotVel - desiredWV_L
+
+		#desiredWV_L = ?
+		#desiredWV_R = ?
 		return desiredWV_L, desiredWV_R
 
 	def updateVels(self, velList):
